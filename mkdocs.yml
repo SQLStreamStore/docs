@@ -1,0 +1,20 @@
+site_name: SQL Stream Store
+theme: readthedocs
+repo_url: https://github.com/SQLStreamStore/SQLStreamStore
+
+pages:
+- Introduction: index.md
+- Quick Start: quickstart.md
+- Using:
+  - Appending: appending.md
+  - Reading: reading.md
+  - Metadata: metadata.md
+  - Subscribing: subscriptions.md
+  - Deleting: deleting.md
+- Implementations:
+  - SQL Server: sqlserver.md
+  - PostgreSQL: postgres.md
+  - SQLite: sqlite.md
+  - HTTP: http.md
+- HAL Server: hal.md
+- Credits: credits.md
