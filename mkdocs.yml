@@ -1,6 +1,6 @@
 site_name: SQL Stream Store
 theme: readthedocs
-repo_url: https://github.com/SQLStreamStore/SQLStreamStore
+repo_url: https://github.com/SQLStreamStore/docs
 
 pages:
 - Introduction: index.md
