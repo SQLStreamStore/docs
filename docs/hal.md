@@ -18,9 +18,64 @@ where `streamStore` is an implementation of `IStreamStore`, and options (optiona
 
 ##Concepts
 
+###REST
+
 `SQLStreamStore.HAL` uses `application/hal+json` to deliver responses. As this is at its heart a RESTful protocol, you may leverage all the usual HTTP techniques to scale out horizontally.
 
-In addition, any non-safe operations (i.e., writes) you may execute on the current resource will be presented to you as `json-hyper-schema` objects as embedded resources. Also, within these `json-hyper-schema` resources, hints may be provided as to how they should be rendered. These are part of the `x-schema-form` sub-property.
+###JSON Schema
+
+Any non-safe operations (i.e., writes) you may execute on the current resource will be presented to you as `json-hyper-schema` objects as embedded resources. Also, within these `json-hyper-schema` resources, hints may be provided as to how they should be rendered. These are part of the `x-schema-form` sub-property.
+
+###Self Documentation
+
+`SQLStreamStore.HAL` leverages the `HAL` concept of curies. Included with every response should be a templated link with a relation of `curies`. For any rellation prefixed with `streamStore:`,  you may send a `GET` request to this url with `accept: text/markdown` to receive the latest documentation of that link relation, omitting the prefix. 
+
+```
+curl -i -H 'accept: text/markdown' http://localhost:5000/docs/append
+```
+
+```
+HTTP/1.1 200 OK
+Date: Mon, 17 Dec 2018 22:53:33 GMT
+Content-Type: text/markdown; charset=utf-8
+Transfer-Encoding: chunked
+Vary: Accept
+
+
+# Append to Stream Schema
+
+
+| Abstract | Extensible | Status | Identifiable | Custom Properties | Additional Properties | Defined In |
+|----------|------------|--------|--------------|-------------------|-----------------------|------------|
+| Can be instantiated | No | Experimental | No | Forbidden | Permitted | [append.schema.json](append.schema.json) |
+
+# Append to Stream Properties
+
+| Property | Type | Required | Defined by |
+|----------|------|----------|------------|
+| [jsonData](#jsondata) | `object` | Optional | Append to Stream (this schema) |
+| [jsonMetadata](#jsonmetadata) | `string` | Optional | Append to Stream (this schema) |
+| [messageId](#messageid) | `string` | **Required** | Append to Stream (this schema) |
+| [type](#type) | `string` | **Required** | Append to Stream (this schema) |
+| `*` | any | Additional | this schema *allows* additional properties |
+
+## jsonData
+
+
+`jsonData`
+* is optional
+* type: `object`
+* defined in this schema
+
+### jsonData Type
+
+
+`object` with following properties:
+
+
+| Property | Type | Required |
+|----------|------|----------|
+```
 
 ##Operations
 
