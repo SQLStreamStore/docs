@@ -368,11 +368,11 @@ Vary: Accept
 
 Please note the use of `-L` in curl - follow redirects. Although the stream url (`/streams/{streamId}`) is bookmarkable, the url it redirects to _is not_. For ease of use, please make sure your client is configured to automatically follow redirects.
 
-The resource returned from this url behaves almost exactly like `/stream`, _except that_ additional embedded resources will be presented to you: `streamStore:append`, and `streamStore:delete-stream`.
+The resource returned from this url behaves almost exactly like `/stream`. As above, only one message is shown for brevity. Additionally, embedded resources that describe the allowed operations on the stream will be presented to you: `streamStore:append`, and `streamStore:delete-stream`.
 
 ###Read Single Message
 
-The single message resource (`/streams/{streamId}/{streamVersion}`}) contains information about a single message.
+The single message resource (`/streams/{streamId}/{streamVersion}`) contains information about a single message. You may bookmark this url.
 
 ```
 curl -i -H 'accept: application/hal+json' http://localhost:5000/streams/test-8d807c28fb3d4138b067ddab08bd99fd/0
@@ -460,4 +460,241 @@ Vary: Accept
 }
 ```
 
-As in `SQLStreamstore`, the `payload` and `metadata` are stored as strings. _editor's note: this may change before release!_
+Notice here that the message _does not_ come back as an embedded resource, but rather as the resource itself. As in `SQLStreamstore`, the `payload` and `metadata` are stored as strings. _editor's note: this may change before release!_
+
+###Read Stream Metadata
+
+The stream metadata resource (`/streams/{streamId}/metadata`) contains information about a stream's metadata - well known properties include `maxCount`, which is the maximum number of messages allowed in the stream, and `maxAge`, the maximum age of a message in seconds. Any additional metadata that was written to the stream will also be inlcluded here.
+
+Unlike other urls, this url is subject to change and is therefore _not_ bookmarkable.
+
+```
+curl -i -H 'accept: application/hal+json' http://localhost:5000/streams/test-8d807c28fb3d4138b067ddab08bd99fd/metadata
+```
+
+```
+{
+  "streamId": "test-8d807c28fb3d4138b067ddab08bd99fd",
+  "metadataStreamVersion": -1,
+  "_links": {
+    "streamStore:index": {
+      "href": "../../",
+      "type": "application/hal+json",
+      "title": "Index"
+    },
+    "streamStore:find": {
+      "href": "../../streams/{streamId}",
+      "templated": true,
+      "type": "application/hal+json",
+      "title": "Find a Stream"
+    },
+    "streamStore:feed-browser": {
+      "href": "../../streams{?p,t,m}",
+      "templated": true,
+      "type": "application/hal+json",
+      "title": "Browse Streams"
+    },
+    "streamStore:metadata": {
+      "href": "../../streams/test-8d807c28fb3d4138b067ddab08bd99fd/metadata",
+      "type": "application/hal+json"
+    },
+    "self": {
+      "href": "../../streams/test-8d807c28fb3d4138b067ddab08bd99fd/metadata",
+      "type": "application/hal+json"
+    },
+    "streamStore:feed": {
+      "href": "../../streams/test-8d807c28fb3d4138b067ddab08bd99fd",
+      "type": "application/hal+json",
+      "title": "test-8d807c28fb3d4138b067ddab08bd99fd"
+    },
+    "curies": {
+      "href": "../../docs/{rel}",
+      "templated": true,
+      "type": "text/markdown",
+      "name": "streamStore",
+      "title": "Documentation",
+      "hreflang": "en"
+    }
+  },
+  "_embedded": {
+    "streamStore:metadata": {
+      "title": "Set Stream Metadata",
+      "type": "object",
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "properties": {
+        "maxCount": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxAge": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "metadataJson": {
+          "type": "object",
+          "x-schema-form": {
+            "key": "metadataJson",
+            "type": "textarea",
+            "rows": 30
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+Only one operation is allowed on this resource: `streamStore:metadata`, which allows you to change the metadata associated with its parent stream.
+
+###Append to Stream
+
+There are two slightly different ways to append to a stream: multiple messages or a single message.
+
+_Editor's note: this is not final and is therefore subject to change!_
+
+With a single message:
+```
+curl -i -H 'sss-expected-version: -3' -H 'content-type: application+json' -d '{"messageId": "390903e2-6e2a-4e3e-ba94-27038a720fce", "type": "-", "jsonData": { }}'  http://localhost:5000/streams/new-stream
+```
+
+```
+HTTP/1.1 200 OK
+Date: Mon, 17 Dec 2018 22:35:50 GMT
+Content-Type: application/hal+json
+Transfer-Encoding: chunked
+Vary: Accept
+
+{
+  "currentVersion": 0,
+  "currentPosition": 1000,
+  "_links": {
+    "streamStore:index": {
+      "href": "../",
+      "type": "application/hal+json",
+      "title": "Index"
+    },
+    "streamStore:find": {
+      "href": "../streams/{streamId}",
+      "templated": true,
+      "type": "application/hal+json",
+      "title": "Find a Stream"
+    },
+    "streamStore:feed-browser": {
+      "href": "../streams{?p,t,m}",
+      "templated": true,
+      "type": "application/hal+json",
+      "title": "Browse Streams"
+    },
+    "streamStore:feed": {
+      "href": "../streams/new-stream",
+      "type": "application/hal+json"
+    },
+    "self": {
+      "href": "../streams/new-stream",
+      "type": "application/hal+json"
+    },
+    "curies": {
+      "href": "../docs/{rel}",
+      "templated": true,
+      "type": "text/markdown",
+      "name": "streamStore",
+      "title": "Documentation",
+      "hreflang": "en"
+    }
+  }
+}
+```
+
+With multiple messages: 
+
+```
+curl -i -H 'sss-expected-version: -3' -H 'content-type: application+json' -d '[{"messageId": "5dce5675-a698-4a02-afc1-48ad88427f9b", "type": "-", "jsonData": { }}, {"messageId": "6da80336-671b-4b07-b166-cebe410b8178", "type": "-", "jsonData": { }}]'  http://localhost:5000/streams/new-stream-multiple
+```
+
+```
+HTTP/1.1 200 OK
+Date: Mon, 17 Dec 2018 22:35:50 GMT
+Content-Type: application/hal+json
+Transfer-Encoding: chunked
+Vary: Accept
+
+{
+  "currentVersion": 1,
+  "currentPosition": 1005,
+  "_links": {
+    "streamStore:index": {
+      "href": "../",
+      "type": "application/hal+json",
+      "title": "Index"
+    },
+    "streamStore:find": {
+      "href": "../streams/{streamId}",
+      "templated": true,
+      "type": "application/hal+json",
+      "title": "Find a Stream"
+    },
+    "streamStore:feed-browser": {
+      "href": "../streams{?p,t,m}",
+      "templated": true,
+      "type": "application/hal+json",
+      "title": "Browse Streams"
+    },
+    "streamStore:feed": {
+      "href": "../streams/new-stream-multiple",
+      "type": "application/hal+json"
+    },
+    "self": {
+      "href": "../streams/new-stream-multiple",
+      "type": "application/hal+json"
+    },
+    "curies": {
+      "href": "../docs/{rel}",
+      "templated": true,
+      "type": "text/markdown",
+      "name": "streamStore",
+      "title": "Documentation",
+      "hreflang": "en"
+    }
+  }
+}
+```
+
+The difference between the two types of requests is that in the case of multiple messages, the message body is an array.
+
+The `messageId` property _must_ be a `Guid`. Additionally, `type` and `jsonData` are required.
+
+If the `SSS-ExpectedVersion` header is omitted, then `ExpectedVersion.Any` is assumed.
+
+###Delete Stream
+
+To delete a stream, simply send a `DELETE` request to the stream.
+
+```
+curl -i -X DELETE  http://localhost:5000/streams/new-stream
+```
+
+```
+HTTP/1.1 204 No Content
+Date: Mon, 17 Dec 2018 22:44:37 GMT
+Vary: Accept
+```
+
+###Delete Stream Message
+
+To delete a stream message, simply send a `DELETE` request to the stream message.
+
+```
+curl -i -X DELETE http://localhost:5000/streams/test-8d807c28fb3d4138b067ddab08bd99fd/0
+```
+
+```
+HTTP/1.1 204 No Content
+Date: Mon, 17 Dec 2018 22:46:10 GMT
+Vary: Accept
+```
+
+Keep in mind that this is a dangerous operation, so great care must be used when using it. For example, if you have an aggregate stream with 5 messages in it, and you delete message 2, your aggregate may not functional properly upon re-hydration. Additionally, it may break HTTP caching for this stream _and_ the all stream.
+
+###Set Stream Metadata
+
+_TBD_
