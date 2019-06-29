@@ -5,13 +5,8 @@ event sourcing or wish to use stream based patterns over a relational database
 and existing operational infrastructure.
 
 This documentation assumes you already have some knowledge of event sourcing. If
-not, there is a good guide on [Event Sourcing
-Basics](https://eventstore.org/docs/event-sourcing-basics/index.html) by the
-EventStore team.
-
-The reasons for creating this and a comparison with NEventStore and EventStore
-can be viewed
-[here](https://github.com/SQLStreamStore/SQLStreamStore/issues/108#issuecomment-348154346).
+not, please take a look at [Resources](resources) for interesting and relevant
+links.
 
 # Things you need to know before adopting
 
