@@ -1,0 +1,1 @@
+docker run -ti --rm --name sss-mkdocs -p 8000:8000 -v %cd%:/docs squidfunk/mkdocs-material
