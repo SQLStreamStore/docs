@@ -79,9 +79,9 @@ additional new messages with the previous written ones, then a
     store.AppendToStream(streamId, ExpectedVersion.Any, new [] { m2, m1, m3} ); // out of order
     store.AppendToStream(streamId, ExpectedVersion.Any, new [] { m3, m4} ); // partial previous write
 
-**With a specific expected`** If the collection of messages have been previously
-written in the same order they appear in the append request starting at the
-expected version no new messages are written.
+**With a specific expected version**: If the collection of messages have been
+previously written in the same order they appear in the append request starting
+at the expected version no new messages are written.
 
     // using int instead of guid for message id to aid clarity
     var m1 = new NewStreamMessage(1, "t", "data");
