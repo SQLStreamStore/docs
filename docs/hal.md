@@ -4,7 +4,7 @@ Thr HTTP server for SqlStreamStore is implemented as an aspnet core middleware.
 
 ##Initialization
 
-You are responsibile for initializing the underlying store. Please refer to the documentation of the store that you are using.
+You are responsible for initializing the underlying store. Please refer to the documentation of the store that you are using.
 
 ##Settings
 
@@ -28,7 +28,7 @@ Any non-safe operations (i.e., writes) you may execute on the current resource w
 
 ###Self Documentation
 
-`SQLStreamStore.HAL` leverages the `HAL` concept of curies. Included with every response should be a templated link with a relation of `curies`. For any rellation prefixed with `streamStore:`,  you may send a `GET` request to this url with `accept: text/markdown` to receive the latest documentation of that link relation, omitting the prefix. 
+`SQLStreamStore.HAL` leverages the `HAL` concept of curies. Included with every response should be a templated link with a relation of `curies`. For any relation prefixed with `streamStore:`,  you may send a `GET` request to this url with `accept: text/markdown` to receive the latest documentation of that link relation, omitting the prefix. 
 
 ```
 curl -i -H 'accept: text/markdown' http://localhost:5000/docs/append
@@ -519,7 +519,7 @@ Notice here that the message _does not_ come back as an embedded resource, but r
 
 ###Read Stream Metadata
 
-The stream metadata resource (`/streams/{streamId}/metadata`) contains information about a stream's metadata - well known properties include `maxCount`, which is the maximum number of messages allowed in the stream, and `maxAge`, the maximum age of a message in seconds. Any additional metadata that was written to the stream will also be inlcluded here.
+The stream metadata resource (`/streams/{streamId}/metadata`) contains information about a stream's metadata - well known properties include `maxCount`, which is the maximum number of messages allowed in the stream, and `maxAge`, the maximum age of a message in seconds. Any additional metadata that was written to the stream will also be included here.
 
 Unlike other urls, this url is subject to change and is therefore _not_ bookmarkable.
 

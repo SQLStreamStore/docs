@@ -36,7 +36,7 @@ can be viewed
   growth, acceptable latency for eventual consistency etc.
   
 - Message metadata payloads are strings only and expected to be JSON format.
-  This is for operational reasons to support splunking a database using it's
+  This is for operational reasons to support spelunking a database using it's
   standard administration tools. Other serialization formats (or compression)
   are not support (strictly speaking JSON isn't _enforced_ either).
 

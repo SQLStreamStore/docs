@@ -39,10 +39,10 @@ The constructor of `NewStreamMessage` is:
    `Company.App.Domian.Event.Foo`) is anti-pattern. CLR types are re-named and
    moved so you want to maintain a map of event type -> clr type in your
    application.
-3. `jsonData` paramater is string. SQLStreamStore doesn't check
+3. `jsonData` parameter is string. SQLStreamStore doesn't check
    the structure nor validity of this. It is names json to encourage json only
    usage.
-4. `jsonMetadata` paramater is option metadata about the message that is
+4. `jsonMetadata` parameter is option metadata about the message that is
    typically orthogonal and/or doesn't belong in the main message body. Examples
    of usage include the security context (`sub` / `client_id`) that caused the
    event as well as causation / correlation identifiers.
@@ -107,7 +107,7 @@ at the expected version no new messages are written.
 In order to leverage idempotent appends the message IDs should be the same for
 identical messages. SQLStreamStore ships with a helper class
 `DeterministicGuidGenerator` that can create GUIDs based on the message and
-stream it is being appended to. When creating a determinisitic generator you are
+stream it is being appended to. When creating a deterministic generator you are
 required to supply a unique namespace that prevents other generators creating
 the same GUIDs with the same input. You typically hard code the namespace in
 your application and should never change it.

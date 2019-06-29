@@ -1,6 +1,6 @@
 # SQL Server Storage
 
-For operational reasons, you should familiarlize yourself with the underlying
+For operational reasons, you should familiarize yourself with the underlying
 database schema. The schema is implemented as two tables, `Streams` and
 `Messages`, and a number of indexes.
 
