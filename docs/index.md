@@ -15,25 +15,26 @@ links.
   blown application/database server.
 
 - While it helps you with working with stream concepts over a relational
-  databases, you must still be have mechanical apathy with the underlying
+  databases, you must still have mechanical apathy with the underlying
   database such as limits, log growth, performance characteristics, exception
-  handling etc.
+  handling, etc. For example, this means that you need to handle any
+  exceptions coming from the underlying ado.net provider.
 
 - SQLStreamStore / relational databases will never be be as fast as custom
   stream / event based databases (e.g EventStore, Kafka). For DDD applications
   (aka "collaborative domains") that would otherwise use a traditional RDBMS
-  databases (and ORMs) it should perform within expectations.
+  database (and ORMs), it should perform within expectations.
 
 - Subscriptions (and thus projections) are eventually consistent and always will
   be.
 
 - You must understand your application's characteristics in terms of load, data
-  growth, acceptable latency for eventual consistency etc.
+  growth, acceptable latency for eventual consistency, etc.
   
-- Message metadata payloads are strings only and expected to be JSON format.
-  This is for operational reasons to support spelunking a database using it's
+- Message metadata payloads are strings only and expected to be a JSON object literal.
+  This is for operational reasons to support spelunking a database using its
   standard administration tools. Other serialization formats (or compression)
-  are not support (strictly speaking JSON isn't _enforced_ either).
+  are not supported (strictly speaking JSON isn't _enforced_ either).
 
 - No support for ambient `System.Transaction` scopes enforcing the concept of
   the stream as the consistency and transactional boundary.
