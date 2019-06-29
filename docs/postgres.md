@@ -1,4 +1,4 @@
-#Postgres Storage
+# Postgres Storage
 
 The database schema for the Postgres SQL Stream Store driver
 consists of two tables, a custom data type, and multiple
@@ -17,7 +17,7 @@ var settings = new PostgresStreamStoreSettings("Host=localhost;Port=5432;User Id
 
 using (var streamStore = new PostgresStreamStore(settings))
 {
-  await streamStore.CreateSchema();
+  await streamStore.CreateSchemaIfNotExists();
 }
 ```
 
@@ -32,48 +32,60 @@ found here - starting with `Tables.sql` and excluding
 
 # Settings
 
-## Constructor
+**Constructor**
 
 Takes a connection string.
 
-## CreateStreamNotifier
+**CreateStreamNotifier**
 
 Allows overriding of the stream store notifier.
 
-## Schema
+**Schema**
 
 The schema SQL Stream Store should place database objects
 into. Defaults to `public`.
 
-## ExplainAnalyze
+**ExplainAnalyze**
 
 Loads the `auto_explain` module and turns it on for all
 queries. Useful for index tuning. Defaults to `false`;
 
-## GetUtcNow
+**GetUtcNow**
 
 A delegate to return the current UTC now. Used in testing
 to control timestamps and time related operations. If not
 set, the database server will control the timestamp.
 
-## LogName
+**LogName**
 
 The log name used for any of the log messages.
 
-## ScavengeAsynchronously
+**ScavengeAsynchronously**
 
 Allows setting whether or not deleting expired (i.e., older
 than maxCount) messages happens in the same database
 transaction as append to stream or not.
 
-This does not effect scavenging when setting a stream's metadata
-- it is always run in the same transaction.
+This does not effect scavenging when setting a stream's
+metadata - it is always run in the same transaction.
 
-## ConnectionFactory
+**ConnectionFactory**
 
-Allows overriding the way a `NpgsqlConnection` is created
+Allows overriding the way a `NpgsqlConnection` is created,
 given a connection string. 
 
 The default implementation simply passes the connection string
 into the `NpgsqlConnection` constructor.
 
+**DisableDeletionTracking**
+
+Disables stream and message deletion tracking. Will increase
+performance, however subscribers won't know if a stream or a
+message has been deleted. This can be modified at runtime.
+
+# Notes
+
+**Scaling**
+
+In order to scale properly, we recommend that you put a connection
+pooling solution in front, e.g. [pgbouncer](https://pgbouncer.github.io/).
