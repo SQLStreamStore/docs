@@ -15,7 +15,7 @@ links.
   blown application/database server.
 
 - While it helps you with working with stream concepts over a relational
-  databases, you must still have mechanical apathy with the underlying
+  databases, you must still have mechanical empathy with the underlying
   database such as limits, log growth, performance characteristics, exception
   handling, etc. For example, this means that you need to handle any
   exceptions coming from the underlying ado.net provider.
