@@ -31,7 +31,7 @@ if this is the last page to read, i.e., are there no more messages to read.
 `ReadDirection.Backwards`. Finally, there is a method `ReadNext` which simply 
 returns the next page.  
 
-**Backwards**
+**Forwards**
 The method to read the 'all' stream forwards is:
 
 ```csharp
