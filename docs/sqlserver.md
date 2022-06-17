@@ -29,4 +29,28 @@ TODO
 
 # Migrating from V2 Schema to V3
 
-TODO
+             // simplified code example
+             
+             var settings = new MsSqlStreamStoreV3Settings(); // you can set some not default values
+             var v3Store = new MsSqlStreamStoreV3(settings);
+             await v3Store.CreateSchemaIfNotExists();
+             var checkSchemaResult = await v3Store.CheckSchema();
+            _logger.LogInformation($"checkSchemaResult before Migrate  CurrentVersion {checkSchemaResult.CurrentVersion }  ");
+            if (checkSchemaResult.CurrentVersion == 2)
+            {
+              //  you can consider to run migration as fire and forget to not block the main thread
+              //Task.Factory.StartNew(() => MigrateToV3());
+                
+              _logger.LogInformation($"Before Migrate IsMatch {checkSchemaResult.IsMatch()} CurrentVersion {checkSchemaResult.CurrentVersion} ExpectedVersion {checkSchemaResult.ExpectedVersion} ");
+              var progress = new Progress<MigrateProgress>();
+              progress.ProgressChanged += (_, migrateProgress) =>
+                   _logger.LogInformation($"Migration stage complete: {migrateProgress.Stage}");
+              await v3Store.Migrate(progress, CancellationToken.None)
+            
+              checkSchemaResult = await v3Store.CheckSchema();
+              _logger.LogInformation($"After Migrate IsMatch {checkSchemaResult.IsMatch()} CurrentVersion {checkSchemaResult.CurrentVersion} ExpectedVersion {checkSchemaResult.ExpectedVersion} ");
+            }
+            return v3Store;
+
+            
+            
