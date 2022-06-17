@@ -52,5 +52,7 @@ TODO
             }
             return v3Store;
 
+
+See more details in [Wiki Example-of-Migration-to-MsSqlStreamStoreV3](https://github.com/SQLStreamStore/SQLStreamStore/wiki/Example-of-Migration-to-MsSqlStreamStoreV3)
             
             
